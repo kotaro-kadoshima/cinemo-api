@@ -23,4 +23,8 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
     List<Movie> findByOriginalLanguage(String language);
 
     List<Movie> findByRatingGreaterThanEqual(Double rating);
+
+    // emotion_statusを条件に上位50件を取得
+    List<Movie> findTop50ByEmotionStatus(String emotionStatus);
+
 }
