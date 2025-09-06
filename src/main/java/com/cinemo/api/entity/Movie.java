@@ -22,7 +22,7 @@ public class Movie {
 
     @Id
     @Column(name = "movie_id")
-    private Long movieId;
+    private Integer movieId;
 
     @Column(name = "title")
     private String title;

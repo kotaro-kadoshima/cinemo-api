@@ -22,7 +22,7 @@ public class MovieService {
     }
 
     // IDで映画を取得
-    public Optional<Movie> getMovieById(Long id) {
+    public Optional<Movie> getMovieById(Integer id) {
         return movieRepository.findById(id);
     }
 
@@ -47,7 +47,7 @@ public class MovieService {
     }
 
     // 映画を削除
-    public void deleteMovie(Long id) {
+    public void deleteMovie(Integer id) {
         movieRepository.deleteById(id);
     }
 }

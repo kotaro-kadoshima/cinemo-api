@@ -4,11 +4,14 @@ import com.cinemo.api.entity.Movie;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+
 
 import java.util.List;
 
 @Repository
-public interface MovieRepository extends JpaRepository<Movie, Long> {
+public interface MovieRepository extends JpaRepository<Movie, Integer> {
 
     // カスタムクエリ：全映画を取得（SQLを明示的に指定）
     @Query(value = "SELECT movie_id, title, original_title, duration, release_date, " +
@@ -26,5 +29,7 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
 
     // emotion_statusを条件に上位50件を取得
     List<Movie> findTop50ByEmotionStatus(String emotionStatus);
+
+    Page<Movie> findByEmotionStatus(String emotionStatus, Pageable pageable);
 
 }

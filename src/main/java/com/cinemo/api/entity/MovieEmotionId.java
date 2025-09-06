@@ -11,8 +11,8 @@ import lombok.*;
 @EqualsAndHashCode
 public class MovieEmotionId implements Serializable {
     @Column(name = "movie_id", nullable = false)
-    private Long movieId;
+    private Integer movieId;
 
     @Column(name = "emotion_id", nullable = false)
-    private Long emotionId;
+    private Integer emotionId;
 }

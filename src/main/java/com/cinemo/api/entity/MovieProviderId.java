@@ -12,8 +12,8 @@ import java.io.Serializable;
 @EqualsAndHashCode
 public class MovieProviderId implements Serializable {
     @Column(name = "movie_id", nullable = false)
-    private Long movieId;
+    private Integer movieId;
 
     @Column(name = "provider_id", nullable = false)
-    private Long providerId;
+    private Integer providerId;
 }

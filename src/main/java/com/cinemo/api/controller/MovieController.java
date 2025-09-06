@@ -19,7 +19,7 @@ public class MovieController {
 
     // 指定されたIDの映画を取得
     @GetMapping("/{id}")
-    public ResponseEntity<Movie> getMovieById(@PathVariable Long id) {
+    public ResponseEntity<Movie> getMovieById(@PathVariable Integer id) {
         Optional<Movie> movie = movieService.getMovieById(id);
         return movie.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -58,7 +58,7 @@ public class MovieController {
 
     // 映画を更新
     @PutMapping("/{id}")
-    public ResponseEntity<Movie> updateMovie(@PathVariable Long id, @RequestBody Movie movie) {
+    public ResponseEntity<Movie> updateMovie(@PathVariable Integer id, @RequestBody Movie movie) {
         movie.setMovieId(id);
         Movie updatedMovie = movieService.saveMovie(movie);
         return ResponseEntity.ok(updatedMovie);
@@ -66,7 +66,7 @@ public class MovieController {
 
     // 映画を削除
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMovie(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteMovie(@PathVariable Integer id) {
         movieService.deleteMovie(id);
         return ResponseEntity.noContent().build();
     }
