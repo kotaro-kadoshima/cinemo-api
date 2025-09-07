@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -22,12 +23,13 @@ import java.util.stream.IntStream;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
+@CrossOrigin(origins = {"http://localhost:3000", "http://127.0.0.1:3000"}, allowCredentials = "true")
 public class RecommendController {
     private final EmotionAnalysisService emotionAnalysisService;
     private final MovieRepository movieRepository;
     //requestをを受け取る
     //
-    @PostMapping("/recommend")
+    @PostMapping(value = "/recommend", consumes = "application/json", produces = "application/json")
     public RecommendResponseDto recommend(@RequestBody RecommendRequestDto req) {
 
         // --- 1. リクエスト受領 & バリデーション ---
