@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -30,7 +32,7 @@ public class EmotionAnalysisService {
         log.info("prompt: {}", prompt);
         EmotionAnalysisResponse emotionAnalysisResponse = emotionAnalysisAgent.call(prompt);
         log.info("emotionAnalysis: {}", emotionAnalysisResponse);
-        List<Emotion> emotions = emotionRepository.findByNameIn(getEmotionNames(emotionAnalysisResponse));
+        List<Emotion> emotions = getEmotionsInOrder(emotionAnalysisResponse);
         log.info("emotions: {}", emotions);
         return emotions;
     }
@@ -44,6 +46,20 @@ public class EmotionAnalysisService {
     private List<String> getEmotionNames(EmotionAnalysisResponse response) {
         return response.detectedEmotions().stream()
                 .map(EmotionAnalysisResponse.DetectedEmotion::emotion)
+                .collect(Collectors.toList());
+    }
+
+    private List<Emotion> getEmotionsInOrder(EmotionAnalysisResponse response) {
+        List<String> emotionNames = getEmotionNames(response);
+        List<Emotion> foundEmotions = emotionRepository.findByNameIn(emotionNames);
+
+        // 元の順序に合わせてソート
+        Map<String, Emotion> emotionMap = foundEmotions.stream()
+                .collect(Collectors.toMap(Emotion::getName, emotion -> emotion));
+
+        return emotionNames.stream()
+                .map(emotionMap::get)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
