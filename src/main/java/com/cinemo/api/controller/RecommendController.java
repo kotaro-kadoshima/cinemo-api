@@ -19,12 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.stream.IntStream;
 
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@CrossOrigin(origins = {"http://localhost:3000", "http://127.0.0.1:3000"}, allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3000","http://localhost:3000", "http://127.0.0.1:3000","https://cinemo-front.vercel.app"}, allowCredentials = "true")
 public class RecommendController {
     private final EmotionAnalysisService emotionAnalysisService;
     private final MovieRecommendService movieRecommendService;
@@ -170,15 +169,5 @@ public class RecommendController {
             case "other" -> "other"; // 特殊扱い
             default -> country; // 既に "ja" などの言語コードが来た場合を許容
         };
-    }
-
-    /**
-     * 仮の推薦理由生成。後で Gemini 呼び出しに置き換える
-     */
-    private String buildReasonMock(String mood, Object movie) {
-        // ここではまだ Movie の型が未確定のため Object を受け、タイトルなどは未使用
-        // 実装接続後は movie.getTitle(), movie.getOverview() 等を使って文面を組み立てる
-        String trimmed = (mood == null || mood.isBlank()) ? "いまの気分" : mood.replaceAll("\\s+", " ").trim();
-        return String.format("%sにそっと寄り添う一本。肩の力を抜いて楽しめます。", trimmed);
     }
 }
