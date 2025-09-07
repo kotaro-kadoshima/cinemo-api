@@ -59,4 +59,9 @@ public class Movie {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @Override
+    public String toString() {
+        return "movieId: " + movieId + ", title: " + title + ", duration: " + duration;
+    }
 }
