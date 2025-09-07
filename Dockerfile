@@ -18,9 +18,32 @@ WORKDIR /app
 #fat jar を配置（*jar でOK）
 COPY --from=build /app/target/*jar /app/app.jar
 
+#Google Cloud認証情報用のディレクトリ作成
+RUN mkdir -p /app/gcp
+
+#起動スクリプト作成
+COPY <<EOF /app/start.sh
+#!/bin/bash
+set -e
+
+# Google Cloud認証情報ファイル作成
+if [ -n "\$GOOGLE_APPLICATION_CREDENTIALS_JSON" ]; then
+    echo "Setting up Google Cloud credentials..."
+    echo "\$GOOGLE_APPLICATION_CREDENTIALS_JSON" > "\$GOOGLE_APPLICATION_CREDENTIALS"
+    echo "Google Cloud credentials file created at \$GOOGLE_APPLICATION_CREDENTIALS"
+fi
+
+# アプリケーション起動
+echo "Starting application..."
+exec java -jar /app/app.jar
+EOF
+
+RUN chmod +x /app/start.sh
+
 #Fargateで安定稼働するためのJVM設定（最小）
 ENV JAVA_TOOL_OPTIONS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=75 -XX:+ExitOnOutOfMemoryError"
 ENV SERVER_PORT=8080
+ENV GOOGLE_APPLICATION_CREDENTIALS="/app/gcp/credentials.json"
 EXPOSE 8080
 
-ENTRYPOINT ["java","-jar","/app/app.jar"]
+ENTRYPOINT ["/app/start.sh"]
