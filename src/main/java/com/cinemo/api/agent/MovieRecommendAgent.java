@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 public class MovieRecommendAgent {
     private final ChatClient agent;
 
-    public MovieRecommendAgent(@Qualifier("ollamaChatModel") ChatModel chatModel) {
-//    public MovieRecommendAgent(@Qualifier("vertexAiGeminiChatModel") ChatModel chatModel) {
+//    public MovieRecommendAgent(@Qualifier("ollamaChatModel") ChatModel chatModel) {
+    public MovieRecommendAgent(@Qualifier("vertexAiGeminiChatModel") ChatModel chatModel) {
         this.agent = ChatClient.builder(chatModel)
                 .defaultSystem("""
                         あなたは映画を選定するプロフェッショナルです。

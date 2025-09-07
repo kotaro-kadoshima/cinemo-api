@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 public class EmotionAnalysisAgent {
     private final ChatClient agent;
 
-    public EmotionAnalysisAgent(@Qualifier("ollamaChatModel") ChatModel chatModel) {
-//    public EmotionAnalysisAgent(@Qualifier("vertexAiGeminiChatModel") ChatModel chatModel) {
+//    public EmotionAnalysisAgent(@Qualifier("ollamaChatModel") ChatModel chatModel) {
+    public EmotionAnalysisAgent(@Qualifier("vertexAiGeminiChatModel") ChatModel chatModel) {
             this.agent = ChatClient.builder(chatModel)
                 .defaultSystem("""
                         あなたは感情を読み取るプロフェッショナルです。

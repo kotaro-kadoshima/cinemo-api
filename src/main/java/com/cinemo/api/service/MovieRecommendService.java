@@ -29,8 +29,10 @@ public class MovieRecommendService {
     public List<AnalysisMovieDto> analysisMovie(String question, List<Movie> movieList) {
         // プロンプトの生成
         String prompt = movieRecommendAgent.createPrompt(question, movieList.toString());
+        log.info("prompt: {}", prompt);
         // agentをcall
         MovieRecommendationResponse response = movieRecommendAgent.call(prompt);
+        log.info("movieRecommendAgentResponse: {}", response);
         // 結果から映画を抽出してリストで返却
         List<AnalysisMovieDto> pickMovies = new ArrayList<>();
         for (MovieRecommendationResponse.Recommendation recommendation : response.recommendations()) {
