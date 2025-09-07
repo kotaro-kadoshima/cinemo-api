@@ -60,7 +60,7 @@ def get_watch_providers(movie_id):
 
 if __name__ == "__main__":
     movies = []
-    for page in range(1, 101):
+    for page in range(1, 50):
         page_movies = get_popular_movies(page)
         # overviewが空でないものだけ追加
         movies.extend([m for m in page_movies if m.get("overview")])
