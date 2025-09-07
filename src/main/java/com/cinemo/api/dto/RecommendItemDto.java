@@ -8,7 +8,7 @@ public class RecommendItemDto {
     private String title;
     private String posterUrl;
     private String reason;
-    private Integer tmdbId;
+    private Long tmdbId;
     private Integer duration;
     private Double rating;
     private List<String> genres;
@@ -18,7 +18,7 @@ public class RecommendItemDto {
     public RecommendItemDto() {}
 
     public RecommendItemDto(String title, String posterUrl, String reason,
-                            Integer tmdbId, Integer duration, Double rating,
+                            Long tmdbId, Integer duration, Double rating,
                             List<String> genres, List<String> emotionTags,
                             String origin) {
         this.title = title;

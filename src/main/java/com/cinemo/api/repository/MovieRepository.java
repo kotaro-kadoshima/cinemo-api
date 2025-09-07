@@ -27,4 +27,5 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
     // emotion_statusを条件に上位50件を取得
     List<Movie> findTop50ByEmotionStatus(String emotionStatus);
 
+    List<Movie> searchMovies(List<Integer> emotionIds, boolean filterByEmotion, List<String> normalizedGenres, boolean filterByGenre, String countryCode, boolean filterByCountry, boolean countryOther, int queryLimit);
 }
