@@ -10,6 +10,7 @@ env:
   ECS_SERVICE: cinemo-service_blooklyn
   ECS_CLUSTER: cinemo_cluster
   CONTAINER_NAME: springboot-api
+  TASK_DEFINITION: cinemo_task
 
 jobs:
   deploy:
@@ -27,6 +28,13 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
+
+      - name: Download current task definition
+        run: |
+          aws ecs describe-task-definition \
+            --task-definition ${{ env.TASK_DEFINITION }} \
+            --query 'taskDefinition' \
+            --output json > task-definition.json
 
       - name: Login to Amazon ECR
         id: login-ecr
