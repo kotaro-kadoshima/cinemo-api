@@ -12,7 +12,7 @@ DB_USER = "neondb_owner"
 DB_PASSWORD = "npg_zD6ypOk8UXFm"
 
 # CSVファイルパス（tmdb_api.pyで出力されたものを想定）
-CSV_PATH = os.path.join(os.path.dirname(__file__), "output", "movies.csv")
+CSV_PATH = os.path.join(os.path.dirname(__file__), "output", "movies_selected.csv")
 
 def insert_movies():
     # PostgreSQLへ接続
