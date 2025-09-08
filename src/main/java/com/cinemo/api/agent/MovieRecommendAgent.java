@@ -2,6 +2,7 @@ package com.cinemo.api.agent;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class MovieRecommendAgent {
     private final ChatClient agent;
 
-//    public MovieRecommendAgent(@Qualifier("ollamaChatModel") ChatModel chatModel) {
+    //    public MovieRecommendAgent(@Qualifier("ollamaChatModel") ChatModel chatModel) {
     public MovieRecommendAgent(@Qualifier("vertexAiGeminiChatModel") ChatModel chatModel) {
         this.agent = ChatClient.builder(chatModel)
                 .defaultSystem("""
@@ -38,8 +39,11 @@ public class MovieRecommendAgent {
         return prompt;
     }
 
-    public MovieRecommendationResponse call(String input) {
-        return agent.prompt(input).call().entity(MovieRecommendationResponse.class);
+    public MovieRecommendationResponse call(String input, String sessionId) {
+        return agent.prompt(input)
+                .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, sessionId))
+                .call()
+                .entity(MovieRecommendationResponse.class);
     }
 
 

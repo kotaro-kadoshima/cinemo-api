@@ -9,6 +9,7 @@ import com.cinemo.api.entity.Movie;
 import com.cinemo.api.repository.MovieRepository;
 import com.cinemo.api.service.EmotionAnalysisService;
 import com.cinemo.api.service.MovieRecommendService;
+import com.cinemo.api.util.AiUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@CrossOrigin(origins = {"http://localhost:3000","http://localhost:3000", "http://127.0.0.1:3000","https://cinemo-front.vercel.app"}, allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001", "http://127.0.0.1:3000", "https://cinemo-front.vercel.app"}, allowCredentials = "true")
 public class RecommendController {
     private final EmotionAnalysisService emotionAnalysisService;
     private final MovieRecommendService movieRecommendService;
@@ -33,6 +34,7 @@ public class RecommendController {
     //
     @PostMapping(value = "/recommend", consumes = "application/json", produces = "application/json")
     public RecommendResponseDto recommend(@RequestBody RecommendRequestDto req) {
+        String sessionId = AiUtil.generateUuidBased();
 
         // --- 1. リクエスト受領 & バリデーション ---
         // mood（気分）は必須
@@ -61,7 +63,7 @@ public class RecommendController {
         // --- 2. 感情抽出（AI → DB突合） ---
         List<Emotion> emotions;
         try {
-            emotions = emotionAnalysisService.analysisEmotion(mood); // AI呼び出し→名前突合→List<Emotion>
+            emotions = emotionAnalysisService.analysisEmotion(mood, sessionId); // AI呼び出し→名前突合→List<Emotion>
         } catch (Exception e) {
             log.warn("emotion analysis failed. proceed without emotion filter. cause={}", e.getMessage());
             emotions = List.of();
@@ -115,17 +117,10 @@ public class RecommendController {
         );
         log.info("repository returned: {} candidates", (candidates == null ? 0 : candidates.size()));
 
-        // --- 4. 上位抽出 ---
-        // Repository 実装後は、以下のように candidates から上位 limit 件を抽出します。
-        // 例) List<MovieRow> picked = topK(candidates, limit);
-        // 現時点（Repository 未結線）は空で進める
-        List<Movie> picked = topK(candidates, limit);
-        log.info("topK: limit={}, picked={}", limit, picked.size());
-
         // --- 5. 推薦理由生成（AI or 仮置き） ---
         // 仮置き実装：候補ごとに短い定型文を生成（後で Gemini 呼び出しに差し替え）
         // 映画を３件AIにて抜粋する
-        List<AnalysisMovieDto> analysisMovies = movieRecommendService.analysisMovie(mood, picked);
+        List<AnalysisMovieDto> analysisMovies = movieRecommendService.analysisMovie(mood, candidates, sessionId);
         log.info("generated reasons: count={}", analysisMovies.size());
 
         // --- 6. レスポンス整形 ---

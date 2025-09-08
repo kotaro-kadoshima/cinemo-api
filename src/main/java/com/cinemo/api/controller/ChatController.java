@@ -1,6 +1,7 @@
 package com.cinemo.api.controller;
 
 import com.cinemo.api.service.EmotionAnalysisService;
+import com.cinemo.api.util.AiUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.vertexai.gemini.VertexAiGeminiChatModel;
@@ -29,7 +30,8 @@ public class ChatController {
 
     @GetMapping("/emotion")
     public String emotionExtraction(@RequestParam String message) {
-        return emotionAnalysisService.analysisEmotion(message).toString();
+        String sessionId = AiUtil.generateUuidBased();
+        return emotionAnalysisService.analysisEmotion(message, sessionId).toString();
     }
 
 }

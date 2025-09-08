@@ -26,12 +26,12 @@ public class MovieRecommendService {
      * @param movieList 　事前に絞った映画の候補
      * @return AIが選定した映画のリスト
      */
-    public List<AnalysisMovieDto> analysisMovie(String question, List<Movie> movieList) {
+    public List<AnalysisMovieDto> analysisMovie(String question, List<Movie> movieList, String sessionId) {
         // プロンプトの生成
         String prompt = movieRecommendAgent.createPrompt(question, movieList.toString());
         log.info("prompt: {}", prompt);
         // agentをcall
-        MovieRecommendationResponse response = movieRecommendAgent.call(prompt);
+        MovieRecommendationResponse response = movieRecommendAgent.call(prompt, sessionId);
         log.info("movieRecommendAgentResponse: {}", response);
         // 結果から映画を抽出してリストで返却
         List<AnalysisMovieDto> pickMovies = new ArrayList<>();

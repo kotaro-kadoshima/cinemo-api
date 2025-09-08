@@ -62,6 +62,6 @@ public class Movie {
 
     @Override
     public String toString() {
-        return "movieId: " + movieId + ", title: " + title + ", duration: " + duration;
+        return "\n{ movieId: " + movieId + ", title: " + title + ", overview: " + overview + "}";
     }
 }

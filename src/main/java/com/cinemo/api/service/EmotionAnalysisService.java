@@ -26,11 +26,11 @@ public class EmotionAnalysisService {
      * @param message 　ユーザー質問
      * @return List<Emotion> 抽出した感情
      */
-    public List<Emotion> analysisEmotion(String message) {
+    public List<Emotion> analysisEmotion(String message, String sessionId) {
         List<Emotion> list = emotionRepository.findAll();
         String prompt = emotionAnalysisAgent.createPrompt(message, list.toString());
         log.info("prompt: {}", prompt);
-        EmotionAnalysisResponse emotionAnalysisResponse = emotionAnalysisAgent.call(prompt);
+        EmotionAnalysisResponse emotionAnalysisResponse = emotionAnalysisAgent.call(prompt, sessionId);
         log.info("emotionAnalysis: {}", emotionAnalysisResponse);
         List<Emotion> emotions = getEmotionsInOrder(emotionAnalysisResponse);
         log.info("emotions: {}", emotions);
