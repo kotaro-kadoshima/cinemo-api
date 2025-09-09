@@ -67,19 +67,4 @@ public class AiConfig {
                                 .build())
                 .build();
     }
-
-    @Bean
-    public VertexAiGeminiChatModel vertexAiGemini25FlashLiteChatModel() {
-        VertexAI vertexAI = new VertexAI(geminiProjectId, "us-central1");
-        return VertexAiGeminiChatModel.builder()
-                .vertexAI(vertexAI)
-                .defaultOptions(
-                        VertexAiGeminiChatOptions.builder()
-                                .model("gemini-2.5-flash-lite")
-                                .temperature(geminiTemperature)
-                                .responseMimeType(responseMimeType)
-                                .build())
-                .build();
-    }
-
 }

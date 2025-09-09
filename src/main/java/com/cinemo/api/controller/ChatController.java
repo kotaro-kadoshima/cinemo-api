@@ -2,29 +2,21 @@ package com.cinemo.api.controller;
 
 import com.cinemo.api.service.EmotionAnalysisService;
 import com.cinemo.api.util.AiUtil;
+import lombok.AllArgsConstructor;
 import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.vertexai.gemini.VertexAiGeminiChatModel;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@AllArgsConstructor
 public class ChatController {
 
     private final OllamaChatModel ollama;
     private final VertexAiGeminiChatModel gemini;
     private final EmotionAnalysisService emotionAnalysisService;
 
-    public ChatController(
-            OllamaChatModel ollama,
-            @Qualifier("vertexAiGeminiChatModel") VertexAiGeminiChatModel gemini,
-            EmotionAnalysisService emotionAnalysisService
-    ) {
-        this.ollama = ollama;
-        this.gemini = gemini;
-        this.emotionAnalysisService = emotionAnalysisService;
-    }
 
     @GetMapping("/ollama")
     public String chatOllama(@RequestParam String message) {
