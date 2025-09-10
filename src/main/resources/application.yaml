@@ -19,6 +19,17 @@ spring:
         options:
           model: ${OLLAMA_MODEL:gemma3:4b}
           temperature: ${OLLAMA_TEMPERATURE:0.7}
+    vertex:
+      ai:
+        gemini:
+          project-id: cinemo-dev-471015
+          location: ${GEMINI_LOCATION:asia-northeast1}
+          chat:
+            options:
+              model: ${GEMINI_MODEL:gemini-2.5-flash}
+              temperature: ${GEMINI_TEMPERATURE:0.7}
+              response-mime-type: application/json
+
 
 server:
   port: ${SERVER_PORT:8080}
