@@ -1,26 +1,24 @@
 package com.cinemo.api.agent;
 
+import com.cinemo.api.util.AgentUtil;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
-import org.springframework.ai.chat.memory.ChatMemory;
-import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class EmotionAnalysisAgent {
-    private final ChatClient agent;
+    private final List<ChatClient> agents;
 
-//    public EmotionAnalysisAgent(@Qualifier("ollamaChatModel") ChatModel chatModel) {
-    public EmotionAnalysisAgent(@Qualifier("vertexAiGeminiChatModel") ChatModel chatModel) {
-            this.agent = ChatClient.builder(chatModel)
-                .defaultSystem("""
-                        あなたは感情を読み取るプロフェッショナルです。
-                        質問から感情を読み取って、感情マスタから抽出してください。
-                        """)
-                .defaultAdvisors(MessageChatMemoryAdvisor.builder(MessageWindowChatMemory.builder().build()).build())
-                .build();
+    //    public EmotionAnalysisAgent(@Qualifier("ollamaChatModel") ChatModel chatModel) {
+    public EmotionAnalysisAgent(List<ChatModel> chatModels) {
+        String systemPrompt = """
+                あなたは感情を読み取るプロフェッショナルです。
+                質問から感情を読み取って、感情マスタから抽出してください。
+                """;
+        this.agents = AgentUtil.createChatClients(chatModels, systemPrompt);
     }
 
     public String createPrompt(String userQuestion, String emotions) {
@@ -41,10 +39,7 @@ public class EmotionAnalysisAgent {
     }
 
     public EmotionAnalysisResponse call(String input, String sessionId) {
-        return agent.prompt(input)
-                .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, sessionId))
-                .call()
-                .entity(EmotionAnalysisResponse.class);
+        return AgentUtil.callAgentWithFallback(agents, input, sessionId, EmotionAnalysisResponse.class);
     }
 
 }

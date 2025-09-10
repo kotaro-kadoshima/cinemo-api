@@ -1,25 +1,23 @@
 package com.cinemo.api.agent;
 
+import com.cinemo.api.util.AgentUtil;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
-import org.springframework.ai.chat.memory.ChatMemory;
-import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.ai.chat.model.ChatModel;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class MovieRecommendAgent {
-    private final ChatClient agent;
+    private final List<ChatClient> agents;
 
     //    public MovieRecommendAgent(@Qualifier("ollamaChatModel") ChatModel chatModel) {
-    public MovieRecommendAgent(@Qualifier("vertexAiGeminiChatModel") ChatModel chatModel) {
-        this.agent = ChatClient.builder(chatModel)
-                .defaultSystem("""
-                        あなたは映画を選定するプロフェッショナルです。
-                        """)
-                .defaultAdvisors(MessageChatMemoryAdvisor.builder(MessageWindowChatMemory.builder().build()).build())
-                .build();
+    public MovieRecommendAgent(List<ChatModel> chatModels) {
+        String systemPrompt = """
+                あなたは映画を選定するプロフェッショナルです。
+                """;
+        this.agents = AgentUtil.createChatClients(chatModels, systemPrompt);
+
     }
 
     public String createPrompt(String userQuestion, String movieList) {
@@ -40,10 +38,7 @@ public class MovieRecommendAgent {
     }
 
     public MovieRecommendationResponse call(String input, String sessionId) {
-        return agent.prompt(input)
-                .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, sessionId))
-                .call()
-                .entity(MovieRecommendationResponse.class);
+        return AgentUtil.callAgentWithFallback(agents, input, sessionId, MovieRecommendationResponse.class);
     }
 
 

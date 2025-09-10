@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Configuration
 public class AiConfig {
 
@@ -56,6 +59,23 @@ public class AiConfig {
     }
 
     @Bean
+    public List<VertexAI> vertexAIList() {
+        return List.of(
+                new VertexAI(geminiProjectId, "asia-northeast1"),
+                new VertexAI(geminiProjectId, "us-central1"),
+                new VertexAI(geminiProjectId, "us-west1"),
+                new VertexAI(geminiProjectId, "us-east1"),
+                new VertexAI(geminiProjectId, "us-east4"),
+                new VertexAI(geminiProjectId, "asia-southeast1"),
+                new VertexAI(geminiProjectId, "asia-east1"),
+                new VertexAI(geminiProjectId, "europe-west1"),
+                new VertexAI(geminiProjectId, "europe-west3"),
+                new VertexAI(geminiProjectId, "europe-west4")
+        );
+    }
+
+
+    @Bean
     public VertexAiGeminiChatModel vertexAiGeminiChatModel(VertexAI vertexAI) {
         return VertexAiGeminiChatModel.builder()
                 .vertexAI(vertexAI)
@@ -67,4 +87,24 @@ public class AiConfig {
                                 .build())
                 .build();
     }
+
+    @Bean
+    public List<VertexAiGeminiChatModel> vertexAiGeminiChatModelFromLocations(List<VertexAI> vertexAIList) {
+        List<VertexAiGeminiChatModel> models = new ArrayList<>();
+        for (VertexAI vertexAI : vertexAIList) {
+            VertexAiGeminiChatModel model = VertexAiGeminiChatModel.builder()
+                    .vertexAI(vertexAI)
+                    .defaultOptions(
+                            VertexAiGeminiChatOptions.builder()
+                                    .model(geminiModel)
+                                    .temperature(geminiTemperature)
+                                    .responseMimeType(responseMimeType)
+                                    .build())
+                    .build();
+            models.add(model);
+        }
+
+        return models;
+    }
+
 }
