@@ -3,7 +3,7 @@ import psycopg2
 import os
 import datetime
 
-API_KEY = "0595c8cc1f021a2dfb763994043d9dcd"
+API_KEY = "XXX" # TMDBのAPIキー
 BASE_URL = "https://api.themoviedb.org/3"
 IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500"
 
