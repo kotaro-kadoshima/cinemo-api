@@ -4,16 +4,17 @@ import com.cinemo.api.util.AgentUtil;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@DependsOn({"vertexAiGeminiChatModelFromLocations"}) // Bean名を指定
 public class EmotionAnalysisAgent {
     private final List<ChatClient> agents;
 
-    //    public EmotionAnalysisAgent(@Qualifier("ollamaChatModel") ChatModel chatModel) {
-    public EmotionAnalysisAgent(List<ChatModel> chatModels) {
+    public EmotionAnalysisAgent(@Qualifier("vertexAiGeminiChatModelFromLocations") List<ChatModel> chatModels) {
         String systemPrompt = """
                 あなたは感情を読み取るプロフェッショナルです。
                 質問から感情を読み取って、感情マスタから抽出してください。

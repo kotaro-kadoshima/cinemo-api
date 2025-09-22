@@ -1,6 +1,7 @@
 package com.cinemo.api.config;
 
 import com.google.cloud.vertexai.VertexAI;
+import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.ollama.api.OllamaApi;
 import org.springframework.ai.ollama.api.OllamaOptions;
@@ -89,10 +90,10 @@ public class AiConfig {
     }
 
     @Bean
-    public List<VertexAiGeminiChatModel> vertexAiGeminiChatModelFromLocations(List<VertexAI> vertexAIList) {
-        List<VertexAiGeminiChatModel> models = new ArrayList<>();
+    public List<ChatModel> vertexAiGeminiChatModelFromLocations(List<VertexAI> vertexAIList) {
+        List<ChatModel> models = new ArrayList<>();
         for (VertexAI vertexAI : vertexAIList) {
-            VertexAiGeminiChatModel model = VertexAiGeminiChatModel.builder()
+            ChatModel model = VertexAiGeminiChatModel.builder()
                     .vertexAI(vertexAI)
                     .defaultOptions(
                             VertexAiGeminiChatOptions.builder()

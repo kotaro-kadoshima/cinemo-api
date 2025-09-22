@@ -3,18 +3,21 @@ package com.cinemo.api.agent;
 import com.cinemo.api.util.AgentUtil;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@DependsOn({"vertexAiGeminiChatModelFromLocations"}) // Bean名を指定
 public class MovieRecommendAgent {
     private final List<ChatClient> agents;
 
-    //    public MovieRecommendAgent(@Qualifier("ollamaChatModel") ChatModel chatModel) {
-    public MovieRecommendAgent(List<ChatModel> chatModels) {
+    public MovieRecommendAgent(@Qualifier("vertexAiGeminiChatModelFromLocations") List<ChatModel> chatModels) {
         String systemPrompt = """
                 あなたは映画を選定するプロフェッショナルです。
+                回答は日本語で行うこと。
                 """;
         this.agents = AgentUtil.createChatClients(chatModels, systemPrompt);
 
