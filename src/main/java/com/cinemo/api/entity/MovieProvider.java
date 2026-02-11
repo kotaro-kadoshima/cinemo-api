@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "movie_providers")
+@Table(name = "movie_providers", schema = "cinemo")
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class MovieProvider {
 

@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "genres")
+@Table(name = "genres", schema = "cinemo")
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class Genre {
 

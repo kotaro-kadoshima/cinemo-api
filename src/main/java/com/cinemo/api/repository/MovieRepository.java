@@ -28,17 +28,17 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
   // ① 1つ目・2つ目・3つ目の感情がすべて一致
     @Query(value = """
         SELECT DISTINCT m.*
-        FROM movies m
+        FROM cinemo.movies m
         WHERE EXISTS (
-            SELECT 1 FROM movie_emotions me
+            SELECT 1 FROM cinemo.movie_emotions me
             WHERE me.movie_id = m.movie_id AND me.rank = 1 AND me.emotion_id = :r1
         )
         AND EXISTS (
-            SELECT 1 FROM movie_emotions me
+            SELECT 1 FROM cinemo.movie_emotions me
             WHERE me.movie_id = m.movie_id AND me.rank = 2 AND me.emotion_id = :r2
         )
         AND EXISTS (
-            SELECT 1 FROM movie_emotions me
+            SELECT 1 FROM cinemo.movie_emotions me
             WHERE me.movie_id = m.movie_id AND me.rank = 3 AND me.emotion_id = :r3
         )
         """, nativeQuery = true)
@@ -49,13 +49,13 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
     // ② 1つ目・2つ目の感情が一致
     @Query(value = """
         SELECT DISTINCT m.*
-        FROM movies m
+        FROM cinemo.movies m
         WHERE EXISTS (
-            SELECT 1 FROM movie_emotions me
+            SELECT 1 FROM cinemo.movie_emotions me
             WHERE me.movie_id = m.movie_id AND me.rank = 1 AND me.emotion_id = :r1
         )
         AND EXISTS (
-            SELECT 1 FROM movie_emotions me
+            SELECT 1 FROM cinemo.movie_emotions me
             WHERE me.movie_id = m.movie_id AND me.rank = 2 AND me.emotion_id = :r2
         )
         """, nativeQuery = true)
@@ -65,9 +65,9 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
     // ③ 1つ目の感情が一致
     @Query(value = """
         SELECT DISTINCT m.*
-        FROM movies m
+        FROM cinemo.movies m
         WHERE EXISTS (
-            SELECT 1 FROM movie_emotions me
+            SELECT 1 FROM cinemo.movie_emotions me
             WHERE me.movie_id = m.movie_id AND me.rank = 1 AND me.emotion_id = :r1
         )
         """, nativeQuery = true)

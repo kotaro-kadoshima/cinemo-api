@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "emotions")
+@Table(name = "emotions", schema = "cinemo")
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class Emotion {
 
