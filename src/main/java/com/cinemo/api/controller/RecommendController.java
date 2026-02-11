@@ -4,6 +4,7 @@ import com.cinemo.api.dto.AnalysisMovieDto;
 import com.cinemo.api.dto.RecommendItemDto;
 import com.cinemo.api.dto.RecommendRequestDto;
 import com.cinemo.api.dto.RecommendResponseDto;
+import com.cinemo.api.dto.ScoredMovie;
 import com.cinemo.api.entity.Emotion;
 import com.cinemo.api.entity.Movie;
 import com.cinemo.api.repository.MovieRepository;
@@ -112,7 +113,7 @@ public class RecommendController {
         //  - filterByCountry: original_language での絞り込みを行うか
         //  - countryOther:    original_language が上記以外（= "other"）を指す場合のフラグ
         //  - limit:           取得件数（上限）
-        List<Movie> candidates = movieRepository.searchMovies(
+        List<ScoredMovie> candidates = movieRepository.searchScoredMovies(
                 emotionIds
         );
         log.info("repository returned: {} candidates", (candidates == null ? 0 : candidates.size()));
